@@ -7,31 +7,77 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/paper-datatable-api/dist/paper-datatable-api-column.html">
+<link rel="import" href="../bower_components/paper-datatable-api/dist/paper-datatable-api.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-view1">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="iron-flex iron-flex-alignment"></style>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+        </style>
+        <div class="layout horizontal center justified">
+            <div class="card">
+            <firebase-app
+                    auth-domain="agenda-63b20.firebaseapp.com"
+                    api-key="4def7289-a8a4-4d7c-b19e-7596a1f646a2"
+                    database-url="https://agenda-63b20.firebaseio.com">
+            </firebase-app>
+            <firebase-document
+                    path="/cars"
+                    data="{{data}}">
 
-        padding: 10px;
-      }
-    </style>
-
-    <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
+            </firebase-document>
+            <paper-card heading="Data from firebase">
+                <div class="card-content">
+                    <paper-datatable-api data="[[data]]">
+                        <paper-datatable-api-column header="Make" draggable-column property="make">
+                            <template >
+                                <span>[[value]]</span>
+                            </template>
+                        </paper-datatable-api-column>
+                        <paper-datatable-api-column header="Model" property="model">
+                            <template>
+                                <span>[[value]]</span>
+                            </template>
+                        </paper-datatable-api-column>
+                        <paper-datatable-api-column header="Year" draggable-column property="year">
+                            <template>
+                                <span>[[value]]</span>
+                            </template>
+                        </paper-datatable-api-column>
+                        <paper-datatable-api-column header="Price" property="price">
+                            <template>
+                                <span>[[value]]</span>
+                            </template>
+                        </paper-datatable-api-column>
+                    </paper-datatable-api>
+                </div>
+            </paper-card>
+            </div>
+        </div>
   </template>
 
   <script>
     Polymer({
       is: 'my-view1',
+      properties: {
+         data: {
+             type: Array,
+             value: []
+         }
+      }
     });
   </script>
+
 </dom-module>

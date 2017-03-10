@@ -7,8 +7,8 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-micro.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 <dom-module id="my-app">
   <template>
@@ -69,11 +70,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Drawer content -->
       <app-drawer id="drawer">
         <app-toolbar>Menu</app-toolbar>
-          <!--<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="view1" href="/view1">View One</a>
-            <a name="view2" href="/view2">View Two</a>
-            <a name="view3" href="/view3">View Three</a>
-        </iron-selector>-->
+          <div class="drawer-list">
+              <h4>Car's List</h4>
+              <p>
+                  <label>Filter:</label>
+                  <input type="text" value="{{filterVal::input}}">
+              </p>
+              <p>
+                  <label>Sort:</label>
+                  <select value="{{sortVal::change}}">
+                      <option value="name">Name</option>
+                      <option value="email">Email</option>
+                      <option value="email_provider">Email Provider</option>
+                  </select>
+              </p>
+              <!--<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                <a name="view1" href="/view1">View One</a>
+                  <a name="view2" href="/view2">View Two</a>
+                  <a name="view3" href="/view3">View Three</a>
+              </iron-selector>-->
+           </div>
       </app-drawer>
 
       <!-- Main content -->
@@ -99,7 +115,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-header-layout>
     </app-drawer-layout>
   </template>
-
   <script>
     Polymer({
       is: 'my-app',
