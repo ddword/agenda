@@ -71,7 +71,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer">
         <app-toolbar>Menu</app-toolbar>
           <div class="drawer-list">
-              <h4>Car's List</h4>
               <p>
                   <label>Filter:</label>
                   <input type="text" value="{{filterVal::input}}">
@@ -79,17 +78,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <p>
                   <label>Sort:</label>
                   <select value="{{sortVal::change}}">
-                      <option value="name">Name</option>
-                      <option value="email">Email</option>
-                      <option value="email_provider">Email Provider</option>
+                      <option value="make">Make</option>
+                      <option value="price">Price</option>
                   </select>
               </p>
-              <!--<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                <a name="view1" href="/view1">View One</a>
-                  <a name="view2" href="/view2">View Two</a>
-                  <a name="view3" href="/view3">View Three</a>
-              </iron-selector>-->
-           </div>
+          </div>
       </app-drawer>
 
       <!-- Main content -->
@@ -108,8 +101,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="view404"
             role="main">
           <my-view1 name="view1"></my-view1>
-           <!-- <my-view2 name="view2"></my-view2>
-            <my-view3 name="view3"></my-view3>-->
           <my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>
