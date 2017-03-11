@@ -28,56 +28,184 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <div class="layout horizontal center justified">
             <div>
-            <firebase-app
-                    auth-domain="agenda-63b20.firebaseapp.com"
-                    api-key="4def7289-a8a4-4d7c-b19e-7596a1f646a2"
-                    database-url="https://agenda-63b20.firebaseio.com">
-            </firebase-app>
-            <firebase-document
-                    path="/cars"
-                    data="{{data}}">
-
-            </firebase-document>
-            <paper-card heading="Data from firebase">
-                <div class="card-content">
-                    <paper-datatable-api data="[[data]]">
-                        <paper-datatable-api-column header="Make" draggable-column property="make">
-                            <template >
-                                <span>[[value]]</span>
-                            </template>
-                        </paper-datatable-api-column>
-                        <paper-datatable-api-column header="Model" property="model">
-                            <template>
-                                <span>[[value]]</span>
-                            </template>
-                        </paper-datatable-api-column>
-                        <paper-datatable-api-column header="Year" draggable-column property="year">
-                            <template>
-                                <span>[[value]]</span>
-                            </template>
-                        </paper-datatable-api-column>
-                        <paper-datatable-api-column header="Price" property="price">
-                            <template>
-                                <span>[[value]]</span>
-                            </template>
-                        </paper-datatable-api-column>
-                    </paper-datatable-api>
+				<firebase-app
+						auth-domain="agenda-63b20.firebaseapp.com"
+						api-key="4def7289-a8a4-4d7c-b19e-7596a1f646a2"
+						database-url="https://agenda-63b20.firebaseio.com">
+				</firebase-app>
+				
+				<firebase-document
+						id="doc" 
+						path="/cars"
+						data="{{data}}"
+						log=true
+						on-data-changed="callMe">
+				</firebase-document>
+				
+                <div>
+                    <p>
+                        <label>Filter:</label>
+                        <input type="text" value="{{filterVal::input}}">
+                    </p>
+                    <p>
+                        <label>Sort:</label>
+                        <select value="{{sortVal::change}}">
+                            <option value=""></option>
+                            <option value="make">Make</option>
+                            <option value="price">Price</option>
+                        </select>
+                    </p>
                 </div>
-            </paper-card>
+                <!-- <paper-card heading="Data from firebase"> -->
+					<div class="card-content">
+						<template is="dom-repeat" items="{{data}}" filter="{{filter(filterVal)}}" sort="{{sort(sortVal)}}">
+			
+							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="make" value="[[item.make]]"></edit-wrapper>
+							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="price" value="[[item.price]]"></edit-wrapper>
+               <hr/>
+               <br/>
+						</template>
+						
+						<input type="text" value="{{newMake::input}}"> | <input type="text" value="{{newPrice::input}}"> 
+
+
+						<!-- <paper-datatable-api data="[[data]]" selectable filters filter="{{filter(filterVal)}}" sort="{{sort(sortVal)}}">
+							<paper-datatable-api-column header="Make" draggable-column property="make" sortable>
+								<template>
+									<span>[[value]]</span>
+								</template>
+							</paper-datatable-api-column>
+							<paper-datatable-api-column header="Model" property="model">
+								<template>
+									<span>[[value]]</span>
+								</template>
+							</paper-datatable-api-column>
+							<paper-datatable-api-column header="Year" draggable-column property="year">
+								<template>
+									<span>[[value]]</span>
+								</template>
+							</paper-datatable-api-column>
+							<paper-datatable-api-column header="Price" property="price" sortable>
+								<template>
+									<span>[[value]]</span>
+								</template>
+							</paper-datatable-api-column>
+						</paper-datatable-api> -->
+					</div>
+				<!-- </paper-card> -->
             </div>
         </div>
   </template>
 
   <script>
     Polymer({
-      is: 'my-view1',
-      properties: {
-         data: {
-             type: Array,
-             value: []
-         }
-      }
+		is: 'my-view1',
+		properties: {
+			sortProperty: {
+				type: String
+			},
+			data: {
+				type: Array,
+				value: [],
+				notify: true,
+				observer: '_itemsChanged',
+			}
+		},
+        _itemsChanged: function() {
+			console.log('_itemsChanged')
+		},
+        _handleEditValue: function(event) {
+			console.dir(event.detail)
+			//this.data[event.detail.id][event.detail.name] = event.detail.value;
+			//[this.name]
+			//event.detail.value
+			
+			//this.$.doc.save("cars");
+        },
+        filter: function(filterVal) {
+            if (!filterVal) {
+                return null;
+            } else {
+                // return a filter function for the current search string
+                filterVal = filterVal.toLowerCase();
+                //alert("work");
+                return function(car) {
+                    var first = car.make.toLowerCase();
+                    return (first.indexOf(filterVal) !== -1);
+                };
+            }
+        },
+        sort: function(string) {
+            string = string.toLowerCase();
+            switch(string) {
+                case 'make':
+					return function (a, b) {
+						if (a.make.toLowerCase() === b.make.toLowerCase()) return 0;
+						return a.make.toLowerCase() < b.make.toLowerCase() ? -1 : 1;
+					};
+				case 'price':
+					return function (a, b) {
+						var priceA = parseInt(a.price, 10),
+							priceB = parseInt(b.price, 10);
+							
+						if (priceA === priceB) return 0;
+						return priceA < priceB ? -1 : 1;
+					};
+            }
+
+        }
     });
   </script>
 
+</dom-module>
+
+<dom-module id="edit-wrapper">
+	<template>
+	|
+		<template is="dom-if" if="[[!_edit]]">
+			<span on-tap="_activeEdit">[[ value ]]</span>
+		</template>
+		 
+		<template is="dom-if" if="[[_edit]]">								
+			<input type="text" value="{{_tmpValue::input}}"> <button on-tap="_validEdit">Save</button>
+		</template>
+		 || 
+	</template>
+	
+	<script>
+		Polymer({
+			is: 'edit-wrapper',
+			properties: {
+				car: {
+					type: Object
+				},
+				value: {
+					type: String,
+				},
+				prop: {
+					type: String,
+				},
+				contentId: {
+					type: String,
+				},
+				_edit: {
+					type: Boolean,
+					value: false,
+				},
+				_tmpValue: String
+			},
+			_activeEdit: function() {
+				this._tmpValue = this.value;
+				this._edit = true;
+			},
+			_validEdit: function () {
+				if (this._tmpValue !== this.value) {
+					this.value = this._tmpValue;
+					this.set('car.' + this.prop, this._tmpValue);
+					this.fire('edit-value', { car: this.value });
+				}
+				this._edit = false;
+			}
+		});
+	</script>
 </dom-module>
