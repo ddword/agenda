@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
+<link rel="import" href="filter-menu.html">
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 <dom-module id="my-app">
@@ -67,23 +68,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}">
     </app-route>
     <app-drawer-layout fullbleed>
-      <!-- Drawer content -->
-      <app-drawer id="drawer">
-        <app-toolbar>Menu</app-toolbar>
-          <div class="drawer-list">
-              <!--<p>
-                  <label>Filter:</label>
-                  <input type="text" value="{{filterVal::input}}">
-              </p>
-              <p>
-                  <label>Sort:</label>
-                  <select value="{{sortVal::change}}">
-                      <option value="make">Make</option>
-                      <option value="price">Price</option>
-                  </select>
-              </p>-->
-          </div>
-      </app-drawer>
+		<!-- Drawer content -->
+		<app-drawer id="drawer">
+		<app-toolbar>Menu</app-toolbar>
+			<div class="drawer-list">
+		  
+				<filter-menu filter-val="{{filterVal}}"></filter-menu>
+			
+
+			</div>
+		</app-drawer>
 
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
@@ -100,45 +94,73 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <my-view1 name="view1"></my-view1>
-          <my-view404 name="view404"></my-view404>
+			
+			<my-view1 name="view1" filter-val="[[filterVal]]"></my-view1> 
+			
+			<my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
   </template>
+  
+  
   <script>
     Polymer({
-      is: 'my-app',
+		is: 'my-app',
 
-      properties: {
-        page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_pageChanged',
-        },
-      },
+		properties: {
+			page: {
+				type: String,
+				reflectToAttribute: true,
+				observer: '_pageChanged',
+			},
+			filterVal: {
+				type: Object,
+				/*value: {
+					make: '',
+					priceFrom: '',
+					priceTo: '',
+					sort: ''
+				},
+				observer: '_filterValChanged',*/
+			}/*,
+			sortVal: {
+				type: String,
+				observer: '_filterValChanged',
+			}*/
+		},
+		
+		filterValChanged: function(event) {
+			console.log('_pagessChanged_pagessChanged_pagessChanged_pagessChanged_pagessChanged');
+		},
+		
+		observers: [
+			'_routePageChanged(routeData.page)'
+			
+		],
+		/*_onFilter: function(event) {
+		console.log('_onFilter_onFilter_onFilter_onFilter_onFilter')
+			this.set('filterVal', event.detail.make);
+			this.set('sortVal', event.detail.sort);
+		},*/
+		
+		_routePageChanged: function(page) {
+			this.page = page || 'view1';
 
-      observers: [
-        '_routePageChanged(routeData.page)',
-      ],
+			if (!this.$.drawer.persistent) {
+			  this.$.drawer.close();
+			}
+		},
 
-      _routePageChanged: function(page) {
-        this.page = page || 'view1';
+		_pageChanged: function(page) {
+			// Load page import on demand. Show 404 page if fails
+			var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
+			this.importHref(resolvedPageUrl, null, this._showPage404, true);
+		},
 
-        if (!this.$.drawer.persistent) {
-          this.$.drawer.close();
-        }
-      },
-
-      _pageChanged: function(page) {
-        // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
-      },
-
-      _showPage404: function() {
-        this.page = 'view404';
-      },
+		_showPage404: function() {
+			this.page = 'view404';
+		},
     });
   </script>
 </dom-module>

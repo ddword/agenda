@@ -1,0 +1,76 @@
+<dom-module id="filter-menu">
+	<template>
+		<p>
+			<label>Make:</label>
+			<input type="text" value="{{filterVal.make::input}}" />
+		</p>
+		<p>
+			<label>Price:</label>
+			<input type="text" value="{{filterVal.priceFrom::input}}" /> - <input type="text" value="{{filterVal.priceTo::input}}" />
+		</p>
+		<p>
+			<label>Sort:</label>
+			<select value="{{filterVal.sort::change}}">
+				<option value="make">Make</option>
+				<option value="price">Price</option>
+				<option value="year">Year</option>
+			</select>
+		</p>
+	</template>
+	<script>
+		Polymer({
+			is: 'filter-menu',
+			properties: {
+				filterVal: {
+					type: Object,
+					value: {
+						make: '',
+						priceFrom: '',
+						priceTo: '',
+						sort: ''
+					},
+					notify: true,
+					observer: '_filterChanged11'
+				}/*,
+				make: {
+					type: String,
+					value: '',
+					observer: '_makeChanged'
+				},
+				priceFrom: {
+					type: String,
+					value: '',
+					observer: '_makeChanged'
+				},
+				priceTo: {
+					type: String,
+					value: '',
+					observer: '_makeChanged'
+				},
+				sort: {
+					type: String,
+					value: '',
+					observer: '_makeChanged'
+				}*/
+			},
+			/*_makeChanged: function() {
+
+				this.set('filterVal.make', this.make);
+				this.set('filterVal.priceFrom', this.priceFrom);
+				this.set('filterVal.priceTo', this.priceTo);
+				this.set('filterVal.sort', this.sort);				
+			},*/
+			_filterChanged11: function() {
+				console.log('innnnnner _filterChanged')
+				/*console.log('innnnnner _filterChanged')
+				console.log(this.filterVal)
+				if(this.filterVal !== this.value){
+					//this.value = this.filterVal;
+					this.fire('changeFS',{ value: this.value});
+					console.log('_filterChanged')
+				}*/
+				//this.fire('filter', {make: this.filterVal, sort: this.sortVal});				
+			},
+		});	
+	</script>
+</dom-module>

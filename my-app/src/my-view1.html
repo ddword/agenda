@@ -40,7 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						data="{{data}}"
 						log=true>
 				</firebase-document>		
-                <div>
+                <!--<div>
                     <p>
                         <label>Filter:</label>
                         <input type="text" value="{{filterVal::input}}">
@@ -53,10 +53,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <option value="price">Price</option>
                         </select>
                     </p>
-                </div>
+                </div> 
+				<div on-change>
+				<span on-changeFS="_handleFS" value=[[filterVal]]></span>
+				<span on-changeFS="_handleFS" value=[[sortVal]]></span>
+				</div>-->
                 <!-- <paper-card heading="Data from firebase"> -->
 					<div class="card-content">
-						<template is="dom-repeat" items="{{data}}" filter="{{_filter(filterVal)}}" sort="{{_sort(sortVal)}}">
+						<template is="dom-repeat" items="{{data}}" filter="{{filter(filterVal.make, filterVal.priceFrom, filterVal.priceTo)}}" sort="{{sort(filterVal.sort)}}">
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="make" value="[[item.make]]"></edit-wrapper>
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="model" value="[[item.model]]"></edit-wrapper>
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="price" value="[[item.price]]"></edit-wrapper>
@@ -99,9 +103,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 		is: 'my-view1',
 		properties: {
+			filterVal: {
+				type: Object,
+				observer: '_filterChanged'
+			},
+			/*filterVal: {
+				type: String,
+				//notify: true,
+				//reflectToAttribute: true,
+				observer: '_filterChanged'
+			},
+			sortVal: {
+				type: String,
+				//notify: true,
+				//reflectToAttribute: true,
+				observer: '_sortChanged'
+			},
 			sortProperty: {
 				type: String
-			},
+			},*/
 			data: {
 				type: Array,
 				value: [],
@@ -109,8 +129,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				observer: '_itemsChanged'
 			}
 		},
+		_filterChanged: function() {
+			console.log('_filterChanged_filterChanged_filterChanged_filterChanged')
+			/*if(this.filterVal !== this.value){
+				//this.value = this.filterVal;
+				//this.fire('changeFS',{ value: this.value});
+				console.log('_filterChanged')
+			}	*/
+		},
+		_sortChanged: function() {
+			console.log('_sortChanged_sortChanged_sortChanged_sortChanged')
+			/*if(this.sortVal !== this.value){
+				this.value = this.sortVal;
+				this.fire('changeFS',{ value: this.value });
+				console.log('_sortChanged')
+			}*/
+		},
         _itemsChanged: function() {
 			console.log('_itemsChanged')
+		},
+		_handleFS: function(event) {
+			console.log('_handleFS');
 		},
         _handleEditValue: function(event) {
 			console.dir(event.detail)
@@ -124,22 +163,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			var index = this.data.indexOf(event.model.item);
 			this.splice('data', index, 1);
 		},
-        _filter: function(filterVal) {
-            if (!filterVal) {
-                return null;
-            } else {
+		filter: function(make) {		
+            //if (!filterVal) {
+               // return null;
+            //} else {
                 // return a filter function for the current search string
-                filterVal = filterVal.toLowerCase();
-                //alert("work");
+                var make = make.toLowerCase();
+                //alert(make);
                 return function(car) {
                     var word = car.make.toLowerCase();
 					var range = parseInt(car.price, 10);
-                    return (word.indexOf(filterVal) !== -1||range <= parseInt(filterVal, 10));
+                    return (word.indexOf(make) !== -1); //||range <= parseInt(make, 10)
                 };
-            }
+            //}
         },
-        _sort: function(string) {
-            string = string.toLowerCase();
+        sort: function(sort) {
+            var string = sort.toLowerCase();
+			
             switch(string) {
                 case 'make':
 					return function (a, b) {
