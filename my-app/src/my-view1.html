@@ -119,9 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				//reflectToAttribute: true,
 				observer: '_sortChanged'
 			},
-			sortProperty: {
-				type: String
-			},*/
+			*/
 			data: {
 				type: Array,
 				value: [],
@@ -129,28 +127,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				observer: '_itemsChanged'
 			}
 		},
-		_filterChanged: function() {
-			console.log('_filterChanged_filterChanged_filterChanged_filterChanged')
-			/*if(this.filterVal !== this.value){
-				//this.value = this.filterVal;
-				//this.fire('changeFS',{ value: this.value});
-				console.log('_filterChanged')
-			}	*/
+		_filterChanged: function(event) {
+			console.log('_filterChanged_filterChanged')
 		},
-		_sortChanged: function() {
-			console.log('_sortChanged_sortChanged_sortChanged_sortChanged')
-			/*if(this.sortVal !== this.value){
-				this.value = this.sortVal;
-				this.fire('changeFS',{ value: this.value });
-				console.log('_sortChanged')
-			}*/
-		},
+		
         _itemsChanged: function() {
 			console.log('_itemsChanged')
 		},
-		_handleFS: function(event) {
+		/*_handleFS: function(event) {
 			console.log('_handleFS');
-		},
+		},*/
         _handleEditValue: function(event) {
 			console.dir(event.detail)
 			//this.data[event.detail.id][event.detail.name] = event.detail.value;
@@ -163,20 +149,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			var index = this.data.indexOf(event.model.item);
 			this.splice('data', index, 1);
 		},
-		filter: function(make) {		
-            //if (!filterVal) {
-               // return null;
-            //} else {
-                // return a filter function for the current search string
-                var make = make.toLowerCase();
-                //alert(make);
-                return function(car) {
-                    var word = car.make.toLowerCase();
-					var range = parseInt(car.price, 10);
-                    return (word.indexOf(make) !== -1); //||range <= parseInt(make, 10)
-                };
-            //}
+		filter: function(make, priceFrom, priceTo) {		
+			make = make.toLowerCase();			
+			priceFrom = parseInt(priceFrom, 10);
+			priceTo = parseInt(priceTo, 10);
+			return function(car) {
+				var condMake = true,
+					condPrice = true;
+				
+				if (make) {
+					var word = car.make.toLowerCase();
+					condMake = (word.indexOf(make) !== -1);
+				}
+				
+				if (priceFrom) {
+					condPrice = condPrice && car.price >= priceFrom;
+				}
+				if (priceTo) {
+					condPrice = condPrice && car.price <= priceTo;
+				}
+				return condMake && condPrice;
+			};
         },
+		
         sort: function(sort) {
             var string = sort.toLowerCase();
 			
@@ -189,8 +184,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				case 'price':
 					return function (a, b) {
 						var priceA = parseInt(a.price, 10),
-							priceB = parseInt(b.price, 10);
-							
+							priceB = parseInt(b.price, 10);	
 						if (priceA === priceB) return 0;
 						return priceA < priceB ? -1 : 1;
 					};

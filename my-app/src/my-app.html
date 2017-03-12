@@ -33,7 +33,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         display: block;
       }
-
       app-header {
         color: #fff;
         background-color: var(--app-primary-color);
@@ -41,11 +40,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
       }
-
       .drawer-list {
         margin: 0 20px;
       }
-
       .drawer-list a {
         display: block;
         padding: 0 16px;
@@ -53,13 +50,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--app-secondary-color);
         line-height: 40px;
       }
-
       .drawer-list a.iron-selected {
         color: black;
         font-weight: bold;
       }
     </style>
-
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -72,28 +67,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<app-drawer id="drawer">
 		<app-toolbar>Menu</app-toolbar>
 			<div class="drawer-list">
-		  
 				<filter-menu filter-val="{{filterVal}}"></filter-menu>
-			
-
 			</div>
 		</app-drawer>
-
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
-
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>My App</div>
           </app-toolbar>
         </app-header>
-
        <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
             fallback-selection="view404"
-            role="main">
+            role="main">	
 			
 			<my-view1 name="view1" filter-val="[[filterVal]]"></my-view1> 
 			
@@ -103,11 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </app-drawer-layout>
   </template>
   
-  
   <script>
     Polymer({
 		is: 'my-app',
-
 		properties: {
 			page: {
 				type: String,
@@ -121,22 +108,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					priceFrom: '',
 					priceTo: '',
 					sort: ''
-				},
-				observer: '_filterValChanged',*/
-			}/*,
-			sortVal: {
-				type: String,
-				observer: '_filterValChanged',
-			}*/
+				},*/
+			}
 		},
 		
 		filterValChanged: function(event) {
-			console.log('_pagessChanged_pagessChanged_pagessChanged_pagessChanged_pagessChanged');
+			console.log('_myAppChanged_myAppChanged');
 		},
-		
 		observers: [
 			'_routePageChanged(routeData.page)'
-			
 		],
 		/*_onFilter: function(event) {
 		console.log('_onFilter_onFilter_onFilter_onFilter_onFilter')
