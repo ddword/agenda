@@ -1,12 +1,23 @@
 <dom-module id="filter-menu">
 	<template>
+	<style>
+		input,select{
+		margin:10px 0;
+		padding: 3px 0;
+		}
+		p{
+		padding: 4px 0;
+		border-bottom: 1px solid #DDDDDD;
+		}
+	</style>
 		<p>
-			<label>Make:</label>
-			<input type="text" value="{{filterVal.make::input}}" />
+			<label>Make:
+			<input type="text" placeholder="Saab" value="{{filterVal.make::input}}" />
+			</label>
 		</p>
 		<p>
 			<label>Price:</label>
-			<input type="text" value="{{filterVal.priceFrom::input}}" /> - <input type="text" value="{{filterVal.priceTo::input}}" />
+			<input type="text" placeholder="priceFrom" value="{{filterVal.priceFrom::input}}" /> - <input type="text" placeholder="priceTo" value="{{filterVal.priceTo::input}}" />
 		</p>
 		<p>
 			<label>Sort:</label>

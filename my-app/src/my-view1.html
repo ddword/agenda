@@ -13,9 +13,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-document.html">
-<link rel="import" href="../bower_components/paper-datatable-api/dist/paper-datatable-api-column.html">
-<link rel="import" href="../bower_components/paper-datatable-api/dist/paper-datatable-api.html">
 <link rel="import" href="shared-styles.html">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
 <dom-module id="my-view1">
     <template>
@@ -25,6 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: block;
                 padding: 10px;
             }
+			
         </style>
         <div class="layout horizontal center justified">
             <div>
@@ -60,39 +60,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				</div>-->
                 <!-- <paper-card heading="Data from firebase"> -->
 					<div class="card-content">
+						<div class="table-row add-row">	
+							<add-wrapper data="{{data}}"></add-wrapper>
+						</div>	
 						<template is="dom-repeat" items="{{data}}" filter="{{filter(filterVal.make, filterVal.priceFrom, filterVal.priceTo)}}" sort="{{sort(filterVal.sort)}}">
+						<style>
+							:host {
+								width:100%;
+							}
+							.card-content{
+								display: table;
+								padding: 10px;
+							}
+							.table-row{
+								padding: 10px;
+								background-color: #fff;
+								border: 1px solid #DDDDDD;
+								border-radius: 4px;
+								margin: 4px 0;
+								width:100%;
+								display:flex;
+								/* flex-wrap: wrap;*/
+								justify-content: center;
+							}
+							.add-row{
+								 background-color: var(--app-third-color);
+							}
+							edit-wrapper{
+								flex: 1 100%;
+							}
+							input,select{
+							margin:2px;
+							padding: 3px 0;
+							}
+						</style>
+						<div class="table-row">
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="make" value="[[item.make]]"></edit-wrapper>
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="model" value="[[item.model]]"></edit-wrapper>
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="price" value="[[item.price]]"></edit-wrapper>
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="year" value="[[item.year]]"></edit-wrapper>
 							<button on-tap="_delete">X</button>
-							<hr/>
-							<br/>
-						</template>						
-						<add-wrapper data="{{data}}"></add-wrapper>
-
-						<!-- <paper-datatable-api data="[[data]]" selectable filters filter="{{filter(filterVal)}}" sort="{{sort(sortVal)}}">
-							<paper-datatable-api-column header="Make" draggable-column property="make" sortable>
-								<template>
-									<span>[[value]]</span>
-								</template>
-							</paper-datatable-api-column>
-							<paper-datatable-api-column header="Model" property="model">
-								<template>
-									<span>[[value]]</span>
-								</template>
-							</paper-datatable-api-column>
-							<paper-datatable-api-column header="Year" draggable-column property="year">
-								<template>
-									<span>[[value]]</span>
-								</template>
-							</paper-datatable-api-column>
-							<paper-datatable-api-column header="Price" property="price" sortable>
-								<template>
-									<span>[[value]]</span>
-								</template>
-							</paper-datatable-api-column>
-						</paper-datatable-api> -->
+						</div>	
+						</template>		
+						
 					</div>
 				<!-- </paper-card> -->
             </div>
@@ -198,15 +208,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="edit-wrapper">
 	<template>
-		|
+	<style>
+		span{padding:0 25px 0 0;}
+		b{color: #4285f4;
+		font-size:18px;
+		}
+	</style>
 		<template is="dom-if" if="[[!_edit]]">
-			<span on-tap="_activeEdit">[[ value ]]</span>
+			<div on-tap="_activeEdit"><span>[[ value ]]</span><b>&#9998</b></div> 
 		</template>
 		 
 		<template is="dom-if" if="[[_edit]]">								
 			<input type="text" value="{{_tmpValue::input}}"> <button on-tap="_validEdit">Save</button>
 		</template>	
-		| 
+		
 	</template>
 	
 	<script>
@@ -246,7 +261,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="add-wrapper">
 	<template>
-		<input type="text" value="{{_newMake::input}}"> | <input type="text" value="{{_newModel::input}}"> |<input type="text" value="{{_newPrice::input}}">  |<input type="text" value="{{_newYear::input}}">  | <button on-tap="_add">Add</button> 
+		
+		<input type="text" placeholder="Saab" value="{{_newMake::input}}">  <input type="text" placeholder="9-5" value="{{_newModel::input}}"> <input type="text" placeholder="2000" value="{{_newPrice::input}}">  <input type="text" placeholder="2005" value="{{_newYear::input}}">   <button on-tap="_add">Add</button> 
 
 	</template>
 	

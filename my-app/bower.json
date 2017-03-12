@@ -17,7 +17,8 @@
     "polymer": "Polymer/polymer#^1.6.0",
     "paper-datatable-api": "^0.3.2",
     "polymerfire": "firebase/polymerfire#^0.10.3",
-    "paper-card": "PolymerElements/paper-card#^1.1.4"
+    "paper-card": "PolymerElements/paper-card#^1.1.4",
+    "iron-list": "polymerelements/iron-list#^1.4.3"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
