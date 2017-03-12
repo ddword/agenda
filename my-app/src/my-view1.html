@@ -38,10 +38,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						id="doc" 
 						path="/cars"
 						data="{{data}}"
-						log=true
-						on-data-changed="callMe">
-				</firebase-document>
-				
+						log=true>
+				</firebase-document>		
                 <div>
                     <p>
                         <label>Filter:</label>
@@ -58,16 +56,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <!-- <paper-card heading="Data from firebase"> -->
 					<div class="card-content">
-						<template is="dom-repeat" items="{{data}}" filter="{{filter(filterVal)}}" sort="{{sort(sortVal)}}">
-			
+						<template is="dom-repeat" items="{{data}}" filter="{{_filter(filterVal)}}" sort="{{_sort(sortVal)}}">
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="make" value="[[item.make]]"></edit-wrapper>
+							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="model" value="[[item.model]]"></edit-wrapper>
 							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="price" value="[[item.price]]"></edit-wrapper>
-               <hr/>
-               <br/>
-						</template>
-						
-						<input type="text" value="{{newMake::input}}"> | <input type="text" value="{{newPrice::input}}"> 
-
+							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="year" value="[[item.year]]"></edit-wrapper>
+							<button on-tap="_delete">X</button>
+							<hr/>
+							<br/>
+						</template>						
+						<add-wrapper data="{{data}}"></add-wrapper>
 
 						<!-- <paper-datatable-api data="[[data]]" selectable filters filter="{{filter(filterVal)}}" sort="{{sort(sortVal)}}">
 							<paper-datatable-api-column header="Make" draggable-column property="make" sortable>
@@ -108,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				type: Array,
 				value: [],
 				notify: true,
-				observer: '_itemsChanged',
+				observer: '_itemsChanged'
 			}
 		},
         _itemsChanged: function() {
@@ -122,7 +120,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			
 			//this.$.doc.save("cars");
         },
-        filter: function(filterVal) {
+		_delete: function(event) {
+			var index = this.data.indexOf(event.model.item);
+			this.splice('data', index, 1);
+		},
+        _filter: function(filterVal) {
             if (!filterVal) {
                 return null;
             } else {
@@ -135,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 };
             }
         },
-        sort: function(string) {
+        _sort: function(string) {
             string = string.toLowerCase();
             switch(string) {
                 case 'make':
@@ -161,15 +163,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="edit-wrapper">
 	<template>
-	|
+		|
 		<template is="dom-if" if="[[!_edit]]">
 			<span on-tap="_activeEdit">[[ value ]]</span>
 		</template>
 		 
 		<template is="dom-if" if="[[_edit]]">								
 			<input type="text" value="{{_tmpValue::input}}"> <button on-tap="_validEdit">Save</button>
-		</template>
-		 || 
+		</template>	
+		| 
 	</template>
 	
 	<script>
@@ -183,9 +185,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					type: String,
 				},
 				prop: {
-					type: String,
-				},
-				contentId: {
 					type: String,
 				},
 				_edit: {
@@ -205,6 +204,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					this.fire('edit-value', { car: this.value });
 				}
 				this._edit = false;
+			}
+		});
+	</script>
+</dom-module>
+
+<dom-module id="add-wrapper">
+	<template>
+		<input type="text" value="{{_newMake::input}}"> | <input type="text" value="{{_newModel::input}}"> |<input type="text" value="{{_newPrice::input}}">  |<input type="text" value="{{_newYear::input}}">  | <button on-tap="_add">Add</button> 
+
+	</template>
+	
+	<script>
+		Polymer({
+			is: 'add-wrapper',
+			properties: {
+				data: {
+					type: Array,
+					notify: true
+				},
+				_newMake: {
+					type: String
+				},
+				_newModel: {
+					type: String
+				},
+				_newPrice: {
+					type: String
+				},
+				_newYear: {
+					type: String
+				},
+			},
+			_add: function(event) {
+				if (this._newMake && this._newModel && this._newPrice && this._newYear) {
+					this.push('data', {
+						make: this._newMake,
+						model: this._newModel,
+						price: this._newPrice,
+						year: this._newYear
+					});
+					
+					this._newMake = '';
+					this._newModel = '';
+					this._newPrice = '';
+					this._newYear = '';
+				}
 			}
 		});
 	</script>
