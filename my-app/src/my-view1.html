@@ -132,8 +132,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 filterVal = filterVal.toLowerCase();
                 //alert("work");
                 return function(car) {
-                    var first = car.make.toLowerCase();
-                    return (first.indexOf(filterVal) !== -1);
+                    var word = car.make.toLowerCase();
+					var range = parseInt(car.price, 10);
+                    return (word.indexOf(filterVal) !== -1||range <= parseInt(filterVal, 10));
                 };
             }
         },
