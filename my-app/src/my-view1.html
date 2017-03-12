@@ -53,11 +53,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <option value="price">Price</option>
                         </select>
                     </p>
-                </div> 
-				<div on-change>
-				<span on-changeFS="_handleFS" value=[[filterVal]]></span>
-				<span on-changeFS="_handleFS" value=[[sortVal]]></span>
-				</div>-->
+                </div> -->
                 <!-- <paper-card heading="Data from firebase"> -->
 					<div class="card-content">
 						<div class="table-row add-row">	
@@ -144,15 +140,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _itemsChanged: function() {
 			console.log('_itemsChanged')
 		},
-		/*_handleFS: function(event) {
-			console.log('_handleFS');
-		},*/
         _handleEditValue: function(event) {
 			console.dir(event.detail)
 			//this.data[event.detail.id][event.detail.name] = event.detail.value;
-			//[this.name]
 			//event.detail.value
-			
 			//this.$.doc.save("cars");
         },
 		_delete: function(event) {
