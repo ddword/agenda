@@ -4,26 +4,27 @@
 		input,select{
 		margin:5px 0;
 		padding: 3px 0;
+		width:100%;
 		}
 		.filter-item{
 		padding: 4px 0;
 		border-bottom: 1px solid #DDDDDD;
 		}
 		.range-item input{
-		width:45%;
+		width:40%;
 		}
 	</style>
 		<div class="filter-item">
-			<label>Make:
+			<label>Make:</label>
 			<input type="text" placeholder="Saab" value="{{filterVal.make::input}}" />
-			</label>
+			
 		</div>
 		<div class="filter-item range-item">
-			<p><label>Price:</label></p>
+			<label>Price:</label><br/>
 			<input type="text" placeholder="priceFrom" value="{{filterVal.priceFrom::input}}" /> - <input type="text" placeholder="priceTo" value="{{filterVal.priceTo::input}}" />
 		</div>
 		<div class="filter-item">
-			<label>Sort:</label>
+			<label>Sort:</label><br/>
 			<select value="{{filterVal.sort::change}}">
 				<option value="make">Make</option>
 				<option value="price">Price</option>
