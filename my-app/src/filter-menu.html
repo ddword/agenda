@@ -2,31 +2,34 @@
 	<template>
 	<style>
 		input,select{
-		margin:10px 0;
+		margin:5px 0;
 		padding: 3px 0;
 		}
-		p{
+		.filter-item{
 		padding: 4px 0;
 		border-bottom: 1px solid #DDDDDD;
 		}
+		.range-item input{
+		width:45%;
+		}
 	</style>
-		<p>
+		<div class="filter-item">
 			<label>Make:
 			<input type="text" placeholder="Saab" value="{{filterVal.make::input}}" />
 			</label>
-		</p>
-		<p>
-			<label>Price:</label>
+		</div>
+		<div class="filter-item range-item">
+			<p><label>Price:</label></p>
 			<input type="text" placeholder="priceFrom" value="{{filterVal.priceFrom::input}}" /> - <input type="text" placeholder="priceTo" value="{{filterVal.priceTo::input}}" />
-		</p>
-		<p>
+		</div>
+		<div class="filter-item">
 			<label>Sort:</label>
 			<select value="{{filterVal.sort::change}}">
 				<option value="make">Make</option>
 				<option value="price">Price</option>
 				<option value="year">Year</option>
 			</select>
-		</p>
+		</div>
 	</template>
 	<script>
 		Polymer({
@@ -65,7 +68,6 @@
 				}*/
 			},
 			/*_makeChanged: function() {
-
 				this.set('filterVal.make', this.make);
 				this.set('filterVal.priceFrom', this.priceFrom);
 				this.set('filterVal.priceTo', this.priceTo);

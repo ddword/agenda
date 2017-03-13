@@ -56,9 +56,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div> -->
                 <!-- <paper-card heading="Data from firebase"> -->
 					<div class="card-content">
-						<div class="table-row add-row">	
-							<add-wrapper data="{{data}}"></add-wrapper>
-						</div>	
 						<template is="dom-repeat" items="{{data}}" filter="{{filter(filterVal.make, filterVal.priceFrom, filterVal.priceTo)}}" sort="{{sort(filterVal.sort)}}">
 						<style>
 							:host {
@@ -71,34 +68,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							.table-row{
 								padding: 10px;
 								background-color: #fff;
-								border: 1px solid #DDDDDD;
-								border-radius: 4px;
-								margin: 4px 0;
+								border-bottom: 1px solid #DDDDDD;
 								width:100%;
 								display:flex;
-								/* flex-wrap: wrap;*/
 								justify-content: center;
 							}
 							.add-row{
 								 background-color: var(--app-third-color);
+								 flex-wrap: nowrap;
 							}
-							edit-wrapper{
+						
+							edit-wrapper, .add-row.table-row input, .add-row.table-row button{
 								flex: 1 100%;
 							}
 							input,select{
 							margin:2px;
 							padding: 3px 0;
 							}
+							button.remove,button.remove:focus{
+							background-color: transparent;
+							border:none;
+							color:red;
+							font-weight:bold;
+							font-size:14px;
+							outline:none;
+							}
 						</style>
 						<div class="table-row">
-							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="make" value="[[item.make]]"></edit-wrapper>
-							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="model" value="[[item.model]]"></edit-wrapper>
-							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="price" value="[[item.price]]"></edit-wrapper>
-							<edit-wrapper on-edit-value="_handleEditValue" car="{{item}}" prop="year" value="[[item.year]]"></edit-wrapper>
-							<button on-tap="_delete">X</button>
+							<edit-wrapper on-edit-value="_handleEditValue" title="Click for edit" car="{{item}}" prop="make" value="[[item.make]]"></edit-wrapper>
+							<edit-wrapper on-edit-value="_handleEditValue" title="Click for edit" car="{{item}}" prop="model" value="[[item.model]]"></edit-wrapper>
+							<edit-wrapper on-edit-value="_handleEditValue" title="Click for edit" car="{{item}}" prop="price" value="[[item.price]]"></edit-wrapper>
+							<edit-wrapper on-edit-value="_handleEditValue" title="Click for edit" car="{{item}}" prop="year" value="[[item.year]]"></edit-wrapper>
+							<button class="remove" on-tap="_delete">&#10006</button>
 						</div>	
 						</template>		
+							
+							<add-wrapper class="table-row add-row" data="{{data}}"></add-wrapper>
 						
+				
 					</div>
 				<!-- </paper-card> -->
             </div>
@@ -200,17 +207,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="edit-wrapper">
 	<template>
 	<style>
-		span{padding:0 25px 0 0;}
-		b{color: #4285f4;
+	input{width: 75%;}
+		
+		b{
+		color: #4285f4;
 		font-size:18px;
+		}
+		a.acheck{
+		font-size:18px;
+		text-decoration: none;
+		color: var(--app-primary-color);
 		}
 	</style>
 		<template is="dom-if" if="[[!_edit]]">
-			<div on-tap="_activeEdit"><span>[[ value ]]</span><b>&#9998</b></div> 
+			<div on-tap="_activeEdit"><span>[[ value ]]</span></div> 
 		</template>
 		 
 		<template is="dom-if" if="[[_edit]]">								
-			<input type="text" value="{{_tmpValue::input}}"> <button on-tap="_validEdit">Save</button>
+			<input type="text" value="{{_tmpValue::input}}"> <a href="#" class="acheck" on-tap="_validEdit">&#10004;</a>
 		</template>	
 		
 	</template>
